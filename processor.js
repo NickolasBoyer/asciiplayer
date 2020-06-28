@@ -120,9 +120,9 @@ const player = {
 
     this.asciiEl.addEventListener('click', (ev) => {
       const rect = ev.srcElement.getBoundingClientRect();
-      const x = ev.clientX - rect.left;
-      const y = ev.clientY - rect.top; 
-      this.handleClick(x, y, ev.srcElement.clientWidth, ev.srcElement.clientHeight)
+      const x = ev.pageX - rect.left;
+      const y = ev.pageY - rect.top; 
+      this.handleClick(x, y, rect.width, rect.height)
     })
   },
   setSourceMedia (src) {
@@ -141,14 +141,14 @@ const player = {
       // let g = frame.data[i * 4 + 1];
       // let b = frame.data[i * 4 + 2];
 
-      this.txt = this.txt + ((i % this.width) === 0 ? '\n' : '')
       this.txt = this.txt + pixArray[Math.floor(scale(r, 0, 256, 0, pixArray.length))]
+      this.txt = this.txt + ((i % this.width) === (this.width - 1) ? '\n' : '')
 
     }
 
     if (this.bar.visible) {
       this.bar.render()
-      this.txt = this.txt.substr(0, this.txt.length - (5 * this.width + 5)) + this.bar.txt
+      this.txt = this.txt.substr(0, this.txt.length - (5 * this.width + 5 + 1)) + this.bar.txt
     }
 
     this.asciiEl.innerHTML = this.txt
@@ -193,10 +193,15 @@ const player = {
     this.video.currentTime = t
   },
   handleClick(x, y, w, h) {
-    const rx = x / (w / this.width)
-    const ry = y / (h / this.height)
-    console.log(rx, ry)
-    if (rx >= (20 + 2) && rx <= (320 - 2) && ry > 163) return this.seek(this.bar.mediaDuration * ((rx - (20 + 2)) / ((320 - 2) - (20 + 2))))
+    const pixelWidth  = (w / this.width)
+    const pixelHeight = (h / this.height)
+    const rx = x / pixelWidth
+    const ry = y / pixelHeight
+
+    const barStart = 15
+    const barEnd = this.width - 18
+
+    if (rx >= barStart && rx <= (barEnd) && ry > 158) return this.seek(this.bar.mediaDuration * ((rx - (barStart)) / ((barEnd - barStart))))
 
     this.paused ? this.play() : this.pause()
   }
