@@ -89,10 +89,9 @@ const player = {
   },
   setPlayerHandlers () {
     this.video.addEventListener("loadedmetadata", (m) => {
-      this.width = this.video.videoWidth
-      this.height = this.video.videoHeight
+      if (!this.width) this.setWidth(this.video.videoWidth)
+      if (!this.height) this.setHeight(this.video.videoHeight)
       this.setReady()
-      this.bar.setWidth(this.width)
       this.bar.setDuration(Math.floor(this.video.duration))
     }, false);
 
@@ -183,6 +182,17 @@ const player = {
     if (this.video.paused || this.video.ended) return;
     window.requestAnimationFrame(player.computeFrame.bind(this))
   },
+  setWidth (w) {
+    this.width = w
+    this.bar.setWidth(this.width)
+  },
+  setHeight(h) {
+    this.height = h
+  },
+  setSize (w, h) {
+    this.setWidth(w)
+    this.setHeight(h)
+  },
   play () { 
     if (!this.ready) return alert('Not ready yet.')
     this.video.play()
@@ -201,7 +211,7 @@ const player = {
     const barStart = 15
     const barEnd = this.width - 18
 
-    if (rx >= barStart && rx <= (barEnd) && ry > 158) return this.seek(this.bar.mediaDuration * ((rx - (barStart)) / ((barEnd - barStart))))
+    if (rx >= barStart && rx <= (barEnd) && ry > (this.height - 5)) return this.seek(this.bar.mediaDuration * ((rx - (barStart)) / ((barEnd - barStart))))
 
     this.paused ? this.play() : this.pause()
   }
@@ -209,8 +219,15 @@ const player = {
 
 document.addEventListener("DOMContentLoaded", () => {
   player.init(pixelRenderer)
+  player.setWidth(Math.floor(window.innerWidth / 6))
+  player.setHeight(Math.floor(window.innerHeight / 7.6))
   player.setSourceMedia('/media/40401.webm')
 });
+
+window.addEventListener('resize', () => {
+  player.setWidth(Math.floor(window.innerWidth / 6))
+  player.setHeight(Math.floor(window.innerHeight / 7.6))
+})
 
 
 const scale = (num, in_min, in_max, out_min, out_max) => {
