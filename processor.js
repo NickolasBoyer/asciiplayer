@@ -176,7 +176,7 @@ const player = {
 
 document.addEventListener("DOMContentLoaded", () => {
   player.init(pixelRenderer)
-  player.setSourceMedia('https://f000.backblazeb2.com/file/herreshaus/40401.webm')
+  player.setSourceMedia('/media/40401.webm')
 });
 
 
