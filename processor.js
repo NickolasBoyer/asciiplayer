@@ -1,5 +1,3 @@
-let superstring = ''
-
 const pixelRenderer = document.getElementById('pixel-renderer')
 const video = document.getElementById("video");
 
@@ -50,7 +48,7 @@ const bar = {
   },
   setPlayState (s) {
     this.playState = s
-    this.playLabel = s ? '   &#9658; PLAY   ' : ' | | PAUSE  '
+    this.playLabel = s ? ' | | PAUSE  ' : '   &#9658; PLAY   '
   },
   hide () { this.visible = false },
   show () { this.visible = true  },
@@ -84,11 +82,16 @@ const player = {
     this.setPlayerHandlers()
     this.setUIHandlers()
   },
+  setReady() {
+    this.ready = true
+    this.computeFrame()
+    this.displayMessage('Click to play')
+  },
   setPlayerHandlers () {
     this.video.addEventListener("loadedmetadata", (m) => {
       this.width = this.video.videoWidth
       this.height = this.video.videoHeight
-      this.ready = true
+      this.setReady()
       this.bar.setWidth(this.width)
       this.bar.setDuration(Math.floor(this.video.duration))
     }, false);
@@ -150,6 +153,31 @@ const player = {
 
     this.asciiEl.innerHTML = this.txt
     return ;
+  },
+  displayMessage (m) {
+    const charWidth = this.width + 1 // newline
+    const centerLine = Math.floor(this.height / 2)
+    const startMessage = Math.floor((charWidth / 2) - (m.length / 2) - 2)
+    const endMessage = Math.floor((charWidth / 2) + (m.length / 2) + 2)
+    const message = m.toUpperCase()
+    this.txt = 
+      this.txt.substring(0,                                             charWidth * (centerLine - 2)) + // section above the mesage
+
+      this.txt.substring(charWidth * (centerLine - 2),                 charWidth * (centerLine - 2) + startMessage) + // left of top border
+      ' '.repeat(m.length + 4) + // upper border
+      this.txt.substring(charWidth * (centerLine - 2) + endMessage,    charWidth * (centerLine - 1)) + // right of top border
+
+      this.txt.substring(charWidth * (centerLine - 1),                 charWidth * (centerLine - 1) + startMessage) + // left of message
+      '  ' + message + '  ' + // message
+      this.txt.substring(charWidth * (centerLine - 1) + endMessage,    charWidth * (centerLine )) + // right of message
+
+      this.txt.substring(charWidth * (centerLine),                     charWidth * (centerLine) + startMessage) + // left of top border
+      ' '.repeat(m.length + 4) + // bottomm border
+      this.txt.substring(charWidth * (centerLine) + endMessage,        charWidth * (centerLine + 1)) + // right of top border
+
+      this.txt.substring(charWidth * (centerLine + 1))
+
+    this.asciiEl.innerHTML = this.txt
   },
   render() {
     if (this.video.paused || this.video.ended) return;
