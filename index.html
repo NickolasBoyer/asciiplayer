@@ -7,21 +7,25 @@
     body {
       background: black;
       color: #CCCCCC;
+      margin: 0;
     }
 
     #pixel-renderer {
       display: inline-block;
+      width: 100vw;
+      height: 100vh;
       font-family: monospace;
       white-space: pre;
       font-size: 7px;
       letter-spacing: .25em;
+
     }
   </style>
 </head>
 
 <body>
   <div id="pixel-renderer"></div>
-  <script type="text/javascript" src="processor.js"></script>
+  <script type="module" src="demo.js"></script>
 </body>
 
 </html>
