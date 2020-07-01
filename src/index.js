@@ -13,6 +13,7 @@ export const Player = (options = {}) => ({
   renderDriver: null,
   fps: options.fps ? (1000/fps) : 1000/30,
   bar: Bar(),
+  noBar: options.noBar || false,
   width: options.width || 0,
   height: options.height || 0,
   paused: true,
@@ -58,7 +59,8 @@ export const Player = (options = {}) => ({
     }, false);
   },
   setUIHandlers () {
-    this.asciiEl.addEventListener('mousemove', (m) => { 
+    this.asciiEl.addEventListener('mousemove', (m) => {
+      if (this.noBar) return ;
       this.bar.visible ? this.bar.hideTimeout(2000) : this.bar.show()
     })
 
@@ -73,6 +75,11 @@ export const Player = (options = {}) => ({
     if (!this.video) return console.warn('Initialize player first')
     this.video.src = src
     this.video.preload = 'metadata'
+  },
+  setSourceObject (src) {
+    if (!this.video) return console.warn('Initialize player first')
+    this.video.srcObject = src
+    this.video.play()
   },
   computeFrame () {
     this.ctx.drawImage(this.video, 0, 0, this.width, this.height);

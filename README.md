@@ -10,7 +10,8 @@ const player = Player({
   pixels: [],   // array with pixels to use,
   fps: 60,      // fps to render video with
   width: 100,   // width in chars
-  height: 60    // height in chars
+  height: 60,   // height in chars
+  noBar: false  // permanently hide controll bar
 })
 
 // set element to render ASCII text to (required)

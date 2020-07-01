@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: black;
+      color: #CCCCCC;
+      margin: 0;
+    }
+
+    #pixel-renderer {
+      display: inline-block;
+      width: 100vw;
+      height: 100vh;
+      font-family: monospace;
+      white-space: pre;
+      font-size: 7px;
+      letter-spacing: .25em;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="pixel-renderer"></div>
+  <script type="module">
+    import { Player } from './src/index.js'
+
+    const pixelRenderer = document.getElementById('pixel-renderer')
+
+    const player = Player({ noBar: true })
+
+    document.addEventListener("DOMContentLoaded", () => {
+    player.init(pixelRenderer)
+    player.setWidth(Math.floor(window.innerWidth / 6))
+    player.setHeight(Math.floor(window.innerHeight / 7.6))
+    });
+
+    window.addEventListener('resize', () => {
+    player.setWidth(Math.floor(window.innerWidth / 6))
+    player.setHeight(Math.floor(window.innerHeight / 7.6))
+    })
+
+    // if cam available thow it on the screen
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          player.setSourceObject(stream);
+        })
+        .catch(function (err) {
+          console.error(err)
+          alert("Something went wrong!");
+        });
+    }
+  </script>
+</body>
+
+</html>
