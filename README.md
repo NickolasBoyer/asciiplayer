@@ -1,6 +1,6 @@
 # ASCII player
 
-Check out the [demo here](https://nickolasboyer.github.io/asciiplayer/), drag a video file on the page and it should play.
+Check out the player [demo here](https://nickolasboyer.github.io/asciiplayer/), drag a video file on the page and it should play. Also you can check out a webcam linked [demo here](https://nickolasboyer.github.io/asciiplayer/cam.html). You can find the source of both demo's in the root of this repo.
 
 ## Example
 
