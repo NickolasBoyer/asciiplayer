@@ -88,11 +88,12 @@ export const Player = (options = {}) => ({
     this.txt = ''
 
     for (let i = 0; i < l; i++) {
-      let r = frame.data[i * 4 + 0];
+      // let r = frame.data[i * 4 + 0];
       // let g = frame.data[i * 4 + 1];
       // let b = frame.data[i * 4 + 2];
+      let w = frame.data[i * 4 + 0] + frame.data[i * 4 + 1] + frame.data[i * 4 + 2]
 
-      this.txt = this.txt + this.pixels[Math.floor(scale(r, 0, 256, 0, this.pixels.length))]
+      this.txt = this.txt + this.pixels[Math.floor(scale(w, 0, (256 * 3), 0, this.pixels.length))]
       this.txt = this.txt + ((i % this.width) === (this.width - 1) ? '\n' : '')
 
     }
