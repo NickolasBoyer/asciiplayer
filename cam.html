@@ -30,7 +30,7 @@
 
     const pixelRenderer = document.getElementById('pixel-renderer')
 
-    const player = Player({ noBar: true })
+    const player = Player({ noBar: true, preserveRatio: 'cover' })
 
     document.addEventListener("DOMContentLoaded", () => {
     player.init(pixelRenderer)

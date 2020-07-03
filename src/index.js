@@ -16,6 +16,7 @@ export const Player = (options = {}) => ({
   noBar: options.noBar || false,
   width: options.width || 0,
   height: options.height || 0,
+  preserveRatio: 'fit',
   paused: true,
   ready: false,
   init (el) {
@@ -82,8 +83,30 @@ export const Player = (options = {}) => ({
     this.video.play()
   },
   computeFrame () {
-    this.ctx.drawImage(this.video, 0, 0, this.width, this.height);
+    let w, h
+    if (!this.preserveRatio) {
+      // don't preserve ratio? just stretch it to the edges
+      w = this.width
+      h = this.height
+    } else {
+      // compute ratios
+      const ri = this.video.videoWidth / this.video.videoHeight
+      const rs = this.width / this.height
+      // is it cover or fit
+      const cover = this.preserveRatio === 'cover'
+      // compute the desired size, and flip the axis it scales to when cover instead of fit
+      w = (rs > ri & cover) ?
+        (this.video.videoWidth * this.height / this.video.videoHeight) :
+        (this.width)
+      h = (rs > ri & cover) ?
+        (this.height) :
+        (this.video.videoHeight * this.width / this.video.videoWidth)
+    }
+    // draw the image with the apropiate size
+    this.ctx.drawImage(this.video, (this.width - w) / 2, (this.height - h) / 2, w, h);
+    // get the image data as a bitmap
     const frame = this.ctx.getImageData(0, 0, this.width, this.height);
+
     const l = frame.data.length / 4;
     this.txt = ''
 
