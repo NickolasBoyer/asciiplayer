@@ -16,7 +16,7 @@ export const Player = (options = {}) => ({
   noBar: options.noBar || false,
   width: options.width || 0,
   height: options.height || 0,
-  preserveRatio: 'fit',
+  preserveRatio: options.preserveRatio || 'fit',
   paused: true,
   ready: false,
   init (el) {
